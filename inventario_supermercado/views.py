@@ -31,7 +31,7 @@ def registro_usuario(request):
             db.collection('usuarios').document(user.uid).set({
                 'email' : email,
                 'uid' : user.uid,
-                'rol' : 'aprendiz',
+                'rol' : 'Gerente',
                 'fecha_registro' : firestore.SERVER_TIMESTAMP,
             })
 
@@ -129,7 +129,7 @@ def dashboard(request):
             # Si entra en el out pero no tiene un perfil en Firestore vamos a manejar el caso
             datosUser = {
                 'email' : request.session.get('email'),
-                'rol' : 'aprendiz',
+                'rol' : request.session.get('rol'),
                 'uid' : request.session.get('uid'),
                 'fecha_registro' : firestore.SERVER_TIMESTAMP
             }

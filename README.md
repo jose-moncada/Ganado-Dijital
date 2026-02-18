@@ -1,2 +1,2 @@
-# Inventario Supermercado
-Esto es una prueba
+# Inventario Supermercado 🛒🏪
+Este es un sistema de administración de inventario para un supermercado 😊
