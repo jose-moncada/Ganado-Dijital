@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Producto</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Gestión de productos</h1>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <h2>Crear Nuevo Producto</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="titulo">Título de la producto técnica</label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Nombre del producto" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción del producto</label>
+                    <textarea id="descripcion" name="descripcion" placeholder="Descripción del producto" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Cantidad del producto</label>
+                    <input type="number" id="cantidad" name="cantidad" placeholder="Cantidad del producto" required></input>
+                </div>
+
+                <button type="submit" class="btn-submit">Guardar Producto</button>
+            </form>
+
+            <a href="{% url 'listar_productos' %}" class="btn-back">← Volver al listado</a>
+        </div>
+    </div>
+</body>
+</html>
