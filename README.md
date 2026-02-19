@@ -1,4 +1,4 @@
-# Inventario Supermercado 1 🛒🏪
+# Inventario Supermercado 🛒🏪
 
 
 

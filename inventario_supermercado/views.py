@@ -55,87 +55,10 @@ def login_required_firebase(view_func):
 
 # logica para solicitarle a Google la validación
 
-def login(request):
-    if ('uid' in request.session):
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        apiKey = os.getenv('FIREBASE_WEB_API_KEY')
-
-        # Endpoind oficial de Google
-        url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={apiKey}"
-
-        payload = {
-            "email" : email,
-            "password" : password,
-            "returnSecureToken" : True
-        }
-
-        try:
-
-            # petición http al servicio de autenticación de google
-            response = requests.post(url, json=payload)
-            data = response.json()
-
-            if response.status_code == 200:
-                # All good
-                request.session['uid'] = data['localId']
-                request.session['email'] = data['email']
-                request.session['idToken'] = data['idToken']
-                messages.success(request, f'👌 Acceso correcto al sistema')
-                return redirect('listar_productos')
-            else:
-                # Error: Analizarlo
-                errorMessage = data.get('error', {}).get('message', 'UNKNOWN ERROR')
-
-                errores_comunes = {
-                    'INVALID_LOGIN_CREDENTIALS': 'La contraseña es incorrecta o el correo no es válido.',
-                    'EMAIL_NOT_FOUND': 'Este correo no está registrado en el sistema.',
-                    'USER_DISABLED': 'Esta cuenta ha sido inhabilitada por el administrador.',
-                    'TOO_MANY_ATTEMPTS_TRY_LATER': 'Demasiados intentos fallidos. Espere unos minutos.'
-                }
-
-                mensaje_usuario = errores_comunes.get(errorMessage, "Error de autenticación, revisa tus credenciales")
-                messages.error(request, mensaje_usuario)
-        except requests.exceptions.RequestException as e:
-            messages.error(request, "Error de conexión con el servidor")
-        except Exception as e:
-            messages.error(request, f"Error inesperado: {str(e)}")
-    return render(request, 'login.html')
-
 def cerrar_sesion(request):
     request.session.flush()
     messages.info(request, 'Has cerrado sesión correctamente')
     return redirect('login')
-
-@login_required_firebase #Verifica que el user esté logueado
-def dashboard(request):
-    # Este es el panl principal, este solo lo permite si el decorador lo permite
-    # Recuparar los datos de Firestore
-
-    uid= request.session.get('uid')
-    datosUser = {}
-
-    try:
-        # Consulta a Firestore usando SDK 
-        doc_ref = db.collection('gerentes').document(uid)
-        doc = doc_ref.get()
-
-        if doc.exists:
-            datosUser = doc.to_dict()
-        else:
-            # Si entra en el out pero no tiene un perfil en Firestore vamos a manejar el caso
-            datosUser = {
-                'email' : request.session.get('email'),
-                'rol' : request.session.get('rol'),
-                'uid' : request.session.get('uid'),
-                'fecha_registro' : firestore.SERVER_TIMESTAMP
-            }
-    except Exception as e:
-        messages.error(request, f'Error al cargar los datos de la base de datos: {e}')
-    return render(request, 'dashboard.html', {'datos': datosUser})
 
 @login_required_firebase
 def listar_productos(request):
@@ -159,45 +82,7 @@ def listar_productos(request):
     
     return render(request, 'productos/listar.html', {'productos' : productos})
 
-@login_required_firebase # Verifica que el usuario esta loggeado
-def anadir_producto(request):
-    """
-    CREATE: Reciben los datos desde el formulario y se almacenan
-    """
-    if (request.method == 'POST'):
-        nombre_producto = request.POST.get('titulo')
-        descripcion = request.POST.get('descripcion')
-        cantidad = request.POST.get('cantidad')
-        uid = request.session.get('uid')
 
-        try:
-            db.collection('productos').add({
-                'nombre_producto': nombre_producto,
-                'descripcion': descripcion,
-                'cantidad' : cantidad,
-                'usuario_id': uid,
-                'fecha_añadido': firestore.SERVER_TIMESTAMP
-            })
-            messages.success(request, "producto añadido con exito")
-            return redirect('listar_productos')
-        except Exception as e:
-            messages.error(request, f"Error al añadir el producto {e}")
-        
-    return render(request, 'productos/form.html')
-
-@login_required_firebase # Verifica que el usuario esta loggeado
-def eliminar_producto(request, producto_id):
-    """
-    DELETE: Eliminar un documento especifico por id
-    """
-    try:
-        db.collection('productos').document(producto_id).delete()
-        messages.success(request, "🗑️ Producto eliminado.")
-    except Exception as e:
-        messages.error(request, f"Error al eliminar: {e}")
-
-    return redirect('listar_productos')
-    
 @login_required_firebase # Verifica que el usuario esta loggeado
 def editar_producto(request, producto_id):
     """
