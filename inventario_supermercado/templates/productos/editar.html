@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Editar producto Técnica</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Título de la producto:</label>
+        <input type="text" name="nombre_producto" value="{{ producto.nombre_producto }}" required>
+
+        <label>Descripción:</label>
+        <textarea name="descripcion" required>{{ producto.descripcion }}</textarea>
+
+        <label>Cantidad:</label>
+        <input type="number" name="cantidad" value="{{ producto.cantidad }}">
+
+        <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'listar_productos' %}">Cancelar</a>
+    </form>
+</body>
+</html>
