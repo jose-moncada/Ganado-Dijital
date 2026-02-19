@@ -32,7 +32,8 @@ cd inventario-supermercado
 
 ```
 
-Luego ve a la carpeta donde clonaste el proyecto y en CMD coloca:
+Luego ve a la carpeta donde clonaste el proyecto, luego a la carpeta config agrega el archivo de tu Firebase y tu APIKEY
+Luego en CMD coloca:
 ```bash
 python manage.py runserver
 ```

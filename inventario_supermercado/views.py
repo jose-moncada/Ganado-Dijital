@@ -11,9 +11,6 @@ import requests
 
 db = initialize_firebase()
 
-def bienvenido(request):
-    return render(request, 'bienvenido.html')
-
 def registro_usuario(request):
     mensaje = None
     if request.method == 'POST':
@@ -105,11 +102,6 @@ def login(request):
             messages.error(request, f"Error inesperado: {str(e)}")
     return render(request, 'login.html')
 
-def cerrar_sesion(request):
-    request.session.flush()
-    messages.info(request, 'Has cerrado sesión correctamente')
-    return redirect('login')
-
 @login_required_firebase #Verifica que el user esté logueado
 def dashboard(request):
     # Este es el panl principal, este solo lo permite si el decorador lo permite
@@ -136,28 +128,6 @@ def dashboard(request):
     except Exception as e:
         messages.error(request, f'Error al cargar los datos de la base de datos: {e}')
     return render(request, 'dashboard.html', {'datos': datosUser})
-
-@login_required_firebase
-def listar_productos(request):
-    """
-    READ: Recuperar los productos del usuario desde firestore
-    """
-
-    uid = request.session.get('uid')
-    productos = []
-
-    try:
-        #Vamos a filtrar los productos que registro del usuario
-
-        docs = db.collection('productos').where('usuario_id', '==', uid).stream()
-        for doc in docs:
-            producto = doc.to_dict()
-            producto['id'] = doc.id
-            productos.append(producto)
-    except Exception as e:
-        messages.error(request, f"Hubo un error al obtener los productos {e}")
-    
-    return render(request, 'productos/listar.html', {'productos' : productos})
 
 @login_required_firebase # Verifica que el usuario esta loggeado
 def anadir_producto(request):
@@ -197,44 +167,3 @@ def eliminar_producto(request, producto_id):
         messages.error(request, f"Error al eliminar: {e}")
 
     return redirect('listar_productos')
-    
-@login_required_firebase # Verifica que el usuario esta loggeado
-def editar_producto(request, producto_id):
-    """
-    UPDATE: Recupera los datos del producto especifico y actualiza los campos en firebase
-    """
-    uid = request.session.get('uid')
-    producto_ref = db.collection('productos').document(producto_id)
-
-    try:
-        doc = producto_ref.get()
-
-        if not doc.exists:
-            messages.error(request, "El producto no existe")
-            return redirect('listar_productos')
-        
-        producto_data = doc.to_dict()
-
-        if producto_data.get('usuario_id') != uid:
-            messages.error(request, "No tienes permiso para editar este producto")
-            return redirect('listar_productos')
-        
-        if request.method == 'POST':
-            nuevo_titulo = request.POST.get('nombre_producto')
-            nueva_desc = request.POST.get('descripcion')
-            nueva_cantidad = request.POST.get('cantidad')
-
-            producto_ref.update({
-                'nombre_producto': nuevo_titulo,
-                'descripcion': nueva_desc,
-                'cantidad': nueva_cantidad,
-                'fecha_actualizacion': firestore.SERVER_TIMESTAMP
-            })
-
-            messages.success(request, "✅ producto actualizado correctamente.")
-            return redirect('listar_productos')
-    except Exception as e:
-        messages.error(request, f"Error al editar el producto: {e}")
-        return redirect('listar_productos')
-    
-    return render(request, 'productos/editar.html', {'producto': producto_data, 'id': producto_id})
