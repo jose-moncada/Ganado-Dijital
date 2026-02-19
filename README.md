@@ -39,3 +39,9 @@ python manage.py runserver
 ```
 
 😊
+
+## Integrantes:
+
+**-** Cristian Ferley Suarez Hurtado
+**-** Duvan Alejandro Rodriguez Cardenas
+**-** Jose Rodolfo Murillo Moncada
