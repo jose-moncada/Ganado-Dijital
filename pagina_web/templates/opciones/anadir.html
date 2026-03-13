@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="contenido">
+        <div class="tarjeta">
+
+            <h2>Añadir producto</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label >Nombre:</label>
+                <input type="text" name="nombre_animal" placeholder="Nombre del Animal" required>
+                <label>Clasificación:</label>
+                <select name="clasificacion" required>
+                    <option selected>Seleccione una clase</option>
+                    <option value="bobinos">Bobinos</option>
+                    <option value="caprinos">Caprinos</option>
+                    <option value="ovinos">Ovinos</option>
+                    <option value="porcinos">Porcinos</option>
+                    <option value="equinos">Equinos</option>
+                    <option value="aves">Aves</option>
+                </select>
+                <label>Color:</label>
+                <select name="color" required>
+                    <option selected>Seleccione un color</option>
+                    <option value="blanco">Blanco</option>
+                    <option value="negro">Negro</option>
+                    <option value="marron">Marrón</option>
+                    <option value="gris">Gris</option>
+                    <option value="blanco_negro">Blanco y Negro</option>
+                    <option value="blanco_marron">Blanco y Marrón</option>
+                    <option value="negro_marron">Negro y Marrón</option>
+                    <option value="gris_blanco">Gris y Blanco</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <label>Descripción:</label>
+                <textarea name="descripcion" placeholder="Descripción del Animal" required></textarea>
+                <label>Edad: </label>
+                <input type="number" placeholder="Edad del Animal" name="edad">
+                <div class="acciones">
+                    <a href="{% url 'listar_animales' %}" class="btn-volver">
+                        Volver
+                    </a>
+                    <button type="submit" class="btn-guardar">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

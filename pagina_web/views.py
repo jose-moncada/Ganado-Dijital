@@ -17,6 +17,7 @@ def bienvenido(request):
 def registro_usuario(request):
     mensaje = None
     if request.method == 'POST':
+        nombre = request.POST.get('nombre')
         email = request.POST.get('email')
         password = request.POST.get('password')
         try:
@@ -26,16 +27,15 @@ def registro_usuario(request):
                 password = password
             )
 
-            # Crear en Firestore
-
-            db.collection('gerentes').document(user.uid).set({
+            db.collection('ganaderos').document(user.uid).set({
+                'nombre' : nombre,
                 'email' : email,
                 'uid' : user.uid,
-                'rol' : 'Gerente',
+                'rol' : 'Ganadero',
                 'fecha_registro' : firestore.SERVER_TIMESTAMP,
             })
 
-            mensaje = f"Usuario registrado correctamente con el UID: {user.uid}"
+            mensaje = f"Te has registrado correctamente 😊: {nombre}"
         except Exception as e:
             mensaje = f"Error: {e}"
     return render(request, 'registro.html', {'mensaje' : mensaje})
@@ -57,7 +57,7 @@ def login_required_firebase(view_func):
 
 def login(request):
     if ('uid' in request.session):
-        return redirect('dashboard')
+        return redirect('listar_animales')
     
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -85,7 +85,7 @@ def login(request):
                 request.session['email'] = data['email']
                 request.session['idToken'] = data['idToken']
                 messages.success(request, f'👌 Acceso correcto al sistema')
-                return redirect('listar_productos')
+                return redirect('listar_animales')
             else:
                 # Error: Analizarlo
                 errorMessage = data.get('error', {}).get('message', 'UNKNOWN ERROR')
@@ -138,70 +138,72 @@ def dashboard(request):
     return render(request, 'dashboard.html', {'datos': datosUser})
 
 @login_required_firebase
-def listar_productos(request):
+def listar_animales(request):
     """
-    READ: Recuperar los productos del usuario desde firestore
+    READ: Recuperar los animales del granjero desde firestore
     """
 
     uid = request.session.get('uid')
-    productos = []
+    animales = []
 
     try:
-        #Vamos a filtrar los productos que registro del usuario
+        #Vamos a filtrar los animales que registro del usuario
 
-        docs = db.collection('productos').where('usuario_id', '==', uid).stream()
+        docs = db.collection('animales').where('usuario_id', '==', uid).stream()
         for doc in docs:
-            producto = doc.to_dict()
-            producto['id'] = doc.id
-            productos.append(producto)
+            animal = doc.to_dict()
+            animal['id'] = doc.id
+            animales.append(animal)
     except Exception as e:
-        messages.error(request, f"Hubo un error al obtener los productos {e}")
+        messages.error(request, f"Hubo un error al obtener sus animales {e}")
     
-    return render(request, 'productos/listar.html', {'productos' : productos})
+    return render(request, 'opciones/listar.html', {'animales' : animales})
 
 @login_required_firebase # Verifica que el usuario esta loggeado
-def anadir_producto(request):
+def anadir_animal(request):
     """
     CREATE: Reciben los datos desde el formulario y se almacenan
     """
     if (request.method == 'POST'):
         clasificacion = request.POST.get('clasificacion')
-        nombre_producto = request.POST.get('nombre_producto')
+        color = request.POST.get('color')
+        nombre_animal = request.POST.get('nombre_animal')
         descripcion = request.POST.get('descripcion')
-        cantidad = request.POST.get('cantidad')
+        edad = request.POST.get('edad')
         uid = request.session.get('uid')
 
         try:
-            db.collection('productos').add({
-                'nombre_producto': nombre_producto,
+            db.collection('animales').add({
+                'nombre_animal': nombre_animal,
                 'descripcion': descripcion,
-                'cantidad' : cantidad,
                 'clasificacion': clasificacion,
+                'color': color,
+                'edad': edad,
                 'usuario_id': uid,
                 'fecha_añadido': firestore.SERVER_TIMESTAMP
             })
-            messages.success(request, "producto añadido con exito")
-            return redirect('listar_productos')
+            messages.success(request, "animal añadido con exito")
+            return redirect('listar_animales')
         except Exception as e:
-            messages.error(request, f"Error al añadir el producto {e}")
+            messages.error(request, f"Error al añadir el animal {e}")
         
-    return render(request, 'productos/anadir.html')
+    return render(request, 'opciones/anadir.html')
 
 @login_required_firebase # Verifica que el usuario esta loggeado
-def eliminar_producto(request, producto_id):
+def eliminar_animal(request, producto_id):
     """
     DELETE: Eliminar un documento especifico por id
     """
     try:
-        db.collection('productos').document(producto_id).delete()
-        messages.success(request, "🗑️ Producto eliminado.")
+        db.collection('animales').document(producto_id).delete()
+        messages.success(request, "🗑️ Aninal eliminado.")
     except Exception as e:
         messages.error(request, f"Error al eliminar: {e}")
 
-    return redirect('listar_productos')
+    return redirect('listar_animales')
     
 @login_required_firebase # Verifica que el usuario esta loggeado
-def editar_producto(request, producto_id):
+def editar_animal(request, producto_id):
     """
     UPDATE: Recupera los datos del producto especifico y actualiza los campos en firebase
     """
@@ -213,13 +215,13 @@ def editar_producto(request, producto_id):
 
         if not doc.exists:
             messages.error(request, "El producto no existe")
-            return redirect('listar_productos')
+            return redirect('listar_animales')
         
         producto_data = doc.to_dict()
 
         if producto_data.get('usuario_id') != uid:
             messages.error(request, "No tienes permiso para editar este producto")
-            return redirect('listar_productos')
+            return redirect('listar_animales')
         
         if request.method == 'POST':
             nueva_clasificacion = request.POST.get('clasificacion') 
@@ -236,9 +238,9 @@ def editar_producto(request, producto_id):
             })
 
             messages.success(request, "✅ producto actualizado correctamente.")
-            return redirect('listar_productos')
+            return redirect('listar_animales')
     except Exception as e:
         messages.error(request, f"Error al editar el producto: {e}")
-        return redirect('listar_productos')
+        return redirect('listar_animales')
     
     return render(request, 'productos/editar.html', {'producto': producto_data, 'id': producto_id})

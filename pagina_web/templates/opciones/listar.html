@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANADO DIJITAL - Lista de Ganado</title>
+    <link rel="icon" href="{% static 'img/logoGanadoDijital.png' %}">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .header{
+            background-color: blue;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        h1{
+            margin: 0;
+        }
+
+        #wlc{
+            margin: 0 0 0 100px;
+        }
+
+        button{
+            width: 130px;
+            height: 40px;
+            border: none;
+            border-radius: 30px;
+            background-color: white;
+            transition: 700ms;
+        }
+
+        button:hover{
+            width: 143px;
+            height: 44px;
+            transform: 700ms;
+        }
+
+        .contenido{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 30px;
+        }
+
+        .tarjeta{
+            background-color: blue;
+            color: white;
+            padding: 30px;
+            margin: 0 30px 0 0;
+            border-radius: 20px;
+        }
+
+        .encabezado-contenido{
+            grid-column: 1 / 4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            a{
+                color: black;
+            }
+        }
+
+        a{
+            color: white;
+        }
+
+        .info{
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-editar{
+            color: greenyellow;
+        }
+
+        .btn-eliminar{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% load static %}
+
+        <img src="{% static 'img/logoGanadoDijital.png' %}" alt="Logo Ganado Dijital" height="70px">
+        <h1 id="wlc">GANADO DIJITAL</h1>
+        <a href="{% url 'bienvenido' %}"><button>Mas Info</button></a>
+    </div>
+    <div class="contenido">
+        <div class="encabezado-contenido">
+            <h2>Animales Registrados: </h2>
+            <div class="acciones">
+                <a href="{% url 'dashboard' %}" class="volver">Volver al inicio</a> |
+                <a href="{% url 'anadir_animal' %}" class="btn-crear">Ingresar Nuevo Animal</a>
+            </div>
+        </div>
+        {% for animal in animales %}
+        <div class="tarjeta">
+            <div class="info">
+                <h3>Nombre del Animal: </h3>{{ animal.nombre_animal }}
+            </div>
+            <div class="info">
+                <h4>Clasificacion: </h4>{{ animal.clasificacion }}
+            </div>
+            <h4>Descripción: </h4>{{ animal.descripcion }}
+            <div class="info">
+                <h4>Edad: </h4>{{ animal.edad }}
+            </div>
+            <div class="info">
+                <a href="{% url 'editar_animal' animal.id %}" class="btn-editar">Editar</a> |
+                <a href="{% url 'eliminar_animal' animal.id %}" class="btn-eliminar" onclick="return confirm('¿Seguro que deseas eliminar este animal?');">Eliminar</a>
+            </div>
+        </div>
+        {% empty %}
+        <h3 class="sin-productos">No tienes animales registrados.</h3>
+        {% endfor %}
+    </div>
+</body>
+</html>

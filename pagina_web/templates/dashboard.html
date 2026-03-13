@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" href="{% static 'img/logoGanadoDijital.png' %}">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .header{
+            background-color: blue;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        h1{
+            margin: 0;
+        }
+
+        #wlc{
+            margin: 0 0 0 100px;
+        }
+
+        button{
+            width: 130px;
+            height: 40px;
+            border: none;
+            border-radius: 30px;
+            background-color: white;
+            transition: 700ms;
+        }
+
+        button:hover{
+            width: 143px;
+            height: 44px;
+            transform: 700ms;
+        }
+
+        .contenido{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tarjeta{
+            background-color: blue;
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin: 35px 0 0 0;
+        }
+
+        .info{
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 0 0 5px 0;
+        }
+
+        .acciones{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 0 0;
+        }
+        
+        a{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% load static %}
+
+        <img src="{% static 'img/logoGanadoDijital.png' %}" alt="Logo Ganado Dijital" height="70px">
+        <h1 id="wlc">GANADO DIJITAL</h1>
+        <h4>Bienvenido/a, {{ datos.nombre }}</h4>
+    </div>
+    <div class="contenido">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="mensaje {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="tarjeta">
+            <h2>Información del Ganadero</h2>
+            <div class="info">
+                <strong>Nombre:</strong> {{ datos.nombre }}
+            </div>
+            <div class="info">
+                <strong>Correo:</strong> {{ datos.email }}
+            </div>
+            <div class="info">
+                <strong>UID:</strong> {{ datos.uid }}
+            </div>
+            <div class="info">
+                <strong>Rol:</strong> {{ datos.rol }}
+            </div>
+            <div class="info">
+                <strong>Fecha de registro:</strong> {{ datos.fecha_registro }}
+            </div>
+            <div class="acciones">
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">
+                        Cerrar sesión
+                    </button>
+                </form>
+                <a href="{% url 'listar_animales' %}" class="btn-productos">
+                    Ver mis animales
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

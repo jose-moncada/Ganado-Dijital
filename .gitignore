@@ -3,4 +3,4 @@ __pycache__/
 *.pyc
 *.sqlite3
 config/.env
-config/serviceAccountKeyIS.json
+config/serviceAccountKey.json

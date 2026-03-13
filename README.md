@@ -13,7 +13,7 @@ Ganado Digital es una plataforma para la gestión eficiente de ganado, facilitan
 
 1. Clona el repositorio:
     ```bash
-    git clone https://github.com/tu-usuario/ganado-digital.git
+    git clone https://github.com/jose-moncada/ganado-digital.git
     ```
 2. Instala dependencias:
     ```bash
@@ -32,3 +32,4 @@ Ganado Digital es una plataforma para la gestión eficiente de ganado, facilitan
 
 Este proyecto está bajo la licencia MIT."# GanadoDijital" 
 "# GanadoDijital" 
+"# Ganado-Dijital" 

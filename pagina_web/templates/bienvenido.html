@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANADO DIJITAL</title>
+    <link rel="icon" href="{% static 'img/logoGanadoDijital.png' %}">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .header{
+            background-color: blue;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        h1{
+            margin: 0;
+        }
+
+        #wlc{
+            margin: 0 0 0 44px;
+        }
+
+        button{
+            width: 130px;
+            height: 40px;
+            border: none;
+            border-radius: 30px;
+            background-color: white;
+            transition: 700ms;
+        }
+
+        button:hover{
+            width: 143px;
+            height: 44px;
+            transform: 700ms;
+        }
+
+        .contenido{
+            display: grid;
+            grid-template-columns: 60% 40%;
+        }
+
+        .derecha, .izquierda    {
+            padding: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        p{
+            text-align: justify;
+        }
+        
+        a{
+            background-color: blue;
+            height: 25px;
+            width: 130px;
+            color: white;
+            padding: 5px;
+            text-align: center;
+            margin: 0 0 10px 0;
+            border-radius: 10px;
+            transition: 700ms;
+        }
+
+        a:hover{
+            width: 143px;
+            height: 27.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% load static %}
+
+        <img src="{% static 'img/logoGanadoDijital.png' %}" alt="Logo Ganado Dijital" height="70px">
+        <h1 id="wlc">Bienvenido a ¡GANADO DIJITAL!</h1>
+        <a href="{% url 'login' %}"><button>Login</button></a>
+    </div>
+    <div class="contenido">
+        <div class="derecha">
+            <h3>¿Quenes Somos?</h3>
+            <p>
+                Ganado Dijital es una aplicación web diseñada para gestionar de manera eficiente el cuidado de tu ganado. Permite llevar un cronograma detallado donde puedes registrar y consultar información sobre vacunas, alimentación y recuperación de cada animal. Así, tendrás un control completo sobre la salud y bienestar de tu ganado, facilitando la toma de decisiones y mejorando la productividad.
+            </p>
+            <h3>Razon Social</h3>
+            <img src="{% static 'img/logoGanadoDijitalCompleto.png' %}" alt="logoGanadoDijitalCompleto" height="200px">
+        </div>
+        <div class="izquierda">
+            <h2>¿Que Deceas Hacer?</h2>
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+            <a href="{% url 'registro' %}" class="btn">Registrarse</a>
+        </div>
+    </div>
+</body>
+</html>
