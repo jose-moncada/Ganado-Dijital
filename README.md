@@ -1,48 +1,33 @@
-# Inventario Supermercado 🛒🏪
+# Ganado Digital
 
-Sistema web de administración de inventario para supermercado desarrollado con **Django**. Permite gestionar productos, existencias y control básico del stock de manera sencilla y eficiente 😊
+Ganado Digital es una plataforma para la gestión eficiente de ganado, facilitando el seguimiento, control y análisis de datos relacionados con la producción ganadera.
 
----
+## Características
 
-## 📌 Características
-- Registro de productos
-- Edición y eliminación de productos
-- Control de stock
-- Panel administrativo
-- Base de datos integrada
-- Entorno virtual con `venv`
+- Registro de animales
+- Control de alimentación y salud
+- Análisis de productividad
+- Reportes personalizados
 
----
+## Instalación
 
-## ⚙️ Requisitos
-Antes de ejecutar el proyecto debes tener instalado:
+1. Clona el repositorio:
+    ```bash
+    git clone https://github.com/tu-usuario/ganado-digital.git
+    ```
+2. Instala dependencias:
+    ```bash
+    npm install
+    ```
+3. Inicia la aplicación:
+    ```bash
+    npm start
+    ```
 
-- Python 3.10 o superior
-- pip
-- Git
+## Contribución
 
----
+¡Las contribuciones son bienvenidas! Por favor, abre un issue o envía un pull request.
 
-## 🚀 Instalación
+## Licencia
 
-1. Clonar el repositorio
-```bash
-git clone https://github.com/jose-moncada/inventory.git
-cd inventario-supermercado
-
-```
-
-Luego ve a la carpeta donde clonaste el proyecto, luego a la carpeta config agrega el archivo de tu Firebase y tu APIKEY
-Luego en CMD coloca:
-```bash
-python manage.py runserver
-```
-
-😊
-
-## Integrantes:
-
-**-** Cristian Ferley Suarez Hurtado
-**-** Duvan Alejandro Rodriguez Cardenas
-**-** Jose Rodolfo Murillo Moncada"# supermarket-inventory" 
-"# inventario-supermercado-django" 
+Este proyecto está bajo la licencia MIT."# GanadoDijital" 
