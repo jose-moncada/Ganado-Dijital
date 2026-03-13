@@ -120,7 +120,7 @@ def dashboard(request):
 
     try:
         # Consulta a Firestore usando SDK 
-        doc_ref = db.collection('gerentes').document(uid)
+        doc_ref = db.collection('ganaderos').document(uid)
         doc = doc_ref.get()
 
         if doc.exists:
