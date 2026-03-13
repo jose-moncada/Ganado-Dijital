@@ -31,3 +31,4 @@ Ganado Digital es una plataforma para la gestión eficiente de ganado, facilitan
 ## Licencia
 
 Este proyecto está bajo la licencia MIT."# GanadoDijital" 
+"# GanadoDijital" 
